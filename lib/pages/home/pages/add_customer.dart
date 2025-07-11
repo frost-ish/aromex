@@ -110,6 +110,7 @@ class _AddCustomerState extends State<AddCustomer> {
                                 }
                               });
                             },
+                            isMandatory: false,
                           ),
                         ),
                       ],

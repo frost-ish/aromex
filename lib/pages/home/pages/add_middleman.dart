@@ -114,6 +114,7 @@ class _AddMiddlemanState extends State<AddMiddleman> {
                                 }
                               });
                             },
+                            isMandatory: false,
                           ),
                         ),
                       ],

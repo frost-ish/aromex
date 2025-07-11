@@ -493,10 +493,11 @@ class _FinalSaleCardState extends State<FinalSaleCard> {
                                     ) ??
                                     0.0,
                                 mCredit:
-                                    double.tryParse(
-                                      _middlemancreditController.text,
-                                    ) ??
-                                    0.0,
+                                    -1 *
+                                    (double.tryParse(
+                                          _middlemancreditController.text,
+                                        ) ??
+                                        0),
                               );
                               showDialog(
                                 context: context,

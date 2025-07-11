@@ -396,24 +396,28 @@ class _ProductDetailDialogState extends State<ProductDetailDialog> {
                         ),
                       ),
                       const SizedBox(height: 8),
-                      Row(
-                        children: [
-                          Switch(
-                            value: _isActive,
-                            onChanged: (value) {
-                              setState(() {
-                                _isActive = value;
-                              });
-                            },
-                            activeColor: Colors.green,
+                      DropdownButton<bool>(
+                        value: _isActive,
+                        onChanged: (value) {
+                          if (value != null) {
+                            setState(() {
+                              _isActive = value;
+                            });
+                          }
+                        },
+                        items: [
+                          DropdownMenuItem(
+                            value: true,
+                            child: Text(
+                              'Active',
+                              style: TextStyle(color: Colors.green),
+                            ),
                           ),
-                          Text(
-                            _isActive ? "Active" : "Inactive",
-                            style: TextStyle(
-                              color:
-                                  _isActive
-                                      ? Colors.green
-                                      : colorScheme.onPrimary,
+                          DropdownMenuItem(
+                            value: false,
+                            child: Text(
+                              'Inactive',
+                              style: TextStyle(color: colorScheme.primary),
                             ),
                           ),
                         ],

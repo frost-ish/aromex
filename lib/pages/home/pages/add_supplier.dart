@@ -111,6 +111,7 @@ class _AddSupplierState extends State<AddSupplier> {
                                 }
                               });
                             },
+                            isMandatory: false,
                           ),
                         ),
                       ],

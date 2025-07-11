@@ -8,7 +8,7 @@ bool validateEmail(String email) {
 }
 
 bool validatePhone(String phone) {
-  final RegExp phoneRegex = RegExp(r'^\d{10}$');
+  final RegExp phoneRegex = RegExp(r'^\d+$');
   return phoneRegex.hasMatch(phone);
 }
 
