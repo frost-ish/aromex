@@ -538,19 +538,16 @@ class _FinalSaleCardState extends State<FinalSaleCard> {
                                                     context,
                                                   ).textTheme.titleLarge,
                                             ),
-                                            content: Container(
+                                            content: SizedBox(
                                               width:
                                                   MediaQuery.of(
                                                     context,
                                                   ).size.width *
                                                   0.6,
-                                              height:
-                                                  MediaQuery.of(
-                                                    context,
-                                                  ).size.height *
-                                                  0.4,
                                               child: Column(
-                                                mainAxisSize: MainAxisSize.min,
+                                                mainAxisSize:
+                                                    MainAxisSize
+                                                        .min,
                                                 children: [
                                                   CustomTextField(
                                                     title: "Notes",
@@ -558,13 +555,19 @@ class _FinalSaleCardState extends State<FinalSaleCard> {
                                                         noteController,
                                                     description:
                                                         "This will be visible on the bill",
+                                                    isMandatory:
+                                                        false, 
                                                   ),
-                                                  const SizedBox(height: 8),
+                                                  const SizedBox(
+                                                    height: 16,
+                                                  ), 
                                                   CustomTextField(
                                                     title: "Adjustment",
                                                     error: adjustmentError,
                                                     textController:
                                                         adjustmentController,
+                                                    isMandatory:
+                                                        false,
                                                     onChanged: (p0) {
                                                       setState(() {
                                                         if (p0.trim().isEmpty) {
@@ -584,7 +587,7 @@ class _FinalSaleCardState extends State<FinalSaleCard> {
                                                       });
                                                     },
                                                     description:
-                                                        "This will be subtracred from the total amount",
+                                                        "This will be subtracted from the total amount", // Fixed typo
                                                   ),
                                                 ],
                                               ),

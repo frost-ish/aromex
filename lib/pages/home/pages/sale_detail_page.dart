@@ -140,8 +140,6 @@ class _SaleDetailPageState extends State<SaleDetailPage> {
                               customer == null
                                   ? null
                                   : () {
-                                    // Replace your existing dialog code with this fixed version:
-
                                     showDialog(
                                       context: context,
                                       builder: (_) {
@@ -172,7 +170,7 @@ class _SaleDetailPageState extends State<SaleDetailPage> {
                                                 child: Column(
                                                   mainAxisSize:
                                                       MainAxisSize
-                                                          .min, // This is key - makes column take minimum space
+                                                          .min, 
                                                   children: [
                                                     CustomTextField(
                                                       title: "Notes",
