@@ -140,6 +140,8 @@ class _SaleDetailPageState extends State<SaleDetailPage> {
                               customer == null
                                   ? null
                                   : () {
+                                    // Replace your existing dialog code with this fixed version:
+
                                     showDialog(
                                       context: context,
                                       builder: (_) {
@@ -161,20 +163,16 @@ class _SaleDetailPageState extends State<SaleDetailPage> {
                                                       context,
                                                     ).textTheme.titleLarge,
                                               ),
-                                              content: Container(
+                                              content: SizedBox(
                                                 width:
                                                     MediaQuery.of(
                                                       context,
                                                     ).size.width *
                                                     0.6,
-                                                height:
-                                                    MediaQuery.of(
-                                                      context,
-                                                    ).size.height *
-                                                    0.4,
                                                 child: Column(
                                                   mainAxisSize:
-                                                      MainAxisSize.min,
+                                                      MainAxisSize
+                                                          .min, // This is key - makes column take minimum space
                                                   children: [
                                                     CustomTextField(
                                                       title: "Notes",
@@ -184,7 +182,7 @@ class _SaleDetailPageState extends State<SaleDetailPage> {
                                                           "This will be visible on the bill",
                                                       isMandatory: false,
                                                     ),
-                                                    const SizedBox(height: 8),
+                                                    const SizedBox(height: 16),
                                                     CustomTextField(
                                                       title: "Adjustment",
                                                       error: adjustmentError,
