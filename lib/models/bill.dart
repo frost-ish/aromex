@@ -5,6 +5,7 @@ import 'package:file_selector/file_selector.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'dart:typed_data';
+import 'dart:io'; // Add this import
 import 'package:pdf/widgets.dart' as pw;
 import 'package:pdf/pdf.dart';
 import 'package:file_selector/file_selector.dart';
@@ -58,19 +59,39 @@ Future<void> generatePdfInvoice(Bill bill) async {
 }
 
 Future<void> savePdfCrossPlatform(Uint8List bytes, String fileName) async {
-  final file = XFile.fromData(
-    bytes,
-    name: fileName,
-    mimeType: 'application/pdf',
-  );
-
-  if (!kIsWeb) {
-    final location = await getSaveLocation(suggestedName: fileName);
-    if (location != null) {
-      await file.saveTo(location.path);
+  try {
+    if (kIsWeb) {
+      // Web platform
+      final file = XFile.fromData(
+        bytes,
+        name: fileName,
+        mimeType: 'application/pdf',
+      );
+      await file.saveTo(file.name);
+    } else {
+      // Desktop platforms (Windows, macOS, Linux)
+      final location = await getSaveLocation(
+        suggestedName: fileName,
+        acceptedTypeGroups: [
+          const XTypeGroup(
+            label: 'PDF files',
+            extensions: ['pdf'],
+          ),
+        ],
+      );
+      
+      if (location != null) {
+        // Write the file directly using dart:io
+        final file = File(location.path);
+        await file.writeAsBytes(bytes);
+        print('PDF saved successfully to: ${location.path}');
+      } else {
+        print('Save operation was cancelled by user');
+      }
     }
-  } else {
-    await file.saveTo(file.name);
+  } catch (e) {
+    print('Error saving PDF: $e');
+    rethrow;
   }
 }
 
