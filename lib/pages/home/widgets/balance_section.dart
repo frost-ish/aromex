@@ -1,6 +1,5 @@
 import 'package:aromex/models/balance_generic.dart';
 import 'package:aromex/pages/home/pages/widgets/update_balance_card.dart';
-import 'package:aromex/pages/home/pages/widgets/update_total_owe_due.dart';
 import 'package:aromex/pages/home/widgets/balance_card.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -67,42 +66,42 @@ class _BalanceSectionState extends State<BalanceSection> {
           expenseRecord = balances[BalanceType.expenseRecord]?.amount ?? 0;
 
           cashUpdatedAt =
-              balances[BalanceType.cash]?.lastTransaction != null
-                  ? DateFormat.yMd().add_jm().format(
-                    balances[BalanceType.cash]!.lastTransaction.toDate(),
-                  )
-                  : '';
+          balances[BalanceType.cash]?.lastTransaction != null
+              ? DateFormat.yMd().add_jm().format(
+            balances[BalanceType.cash]!.lastTransaction.toDate(),
+          )
+              : '';
           bankUpdatedAt =
-              balances[BalanceType.bank]?.lastTransaction != null
-                  ? DateFormat.yMd().add_jm().format(
-                    balances[BalanceType.bank]!.lastTransaction.toDate(),
-                  )
-                  : '';
+          balances[BalanceType.bank]?.lastTransaction != null
+              ? DateFormat.yMd().add_jm().format(
+            balances[BalanceType.bank]!.lastTransaction.toDate(),
+          )
+              : '';
           creditCardUpdatedAt =
-              balances[BalanceType.creditCard]?.lastTransaction != null
-                  ? DateFormat.yMd().add_jm().format(
-                    balances[BalanceType.creditCard]!.lastTransaction.toDate(),
-                  )
-                  : '';
+          balances[BalanceType.creditCard]?.lastTransaction != null
+              ? DateFormat.yMd().add_jm().format(
+            balances[BalanceType.creditCard]!.lastTransaction.toDate(),
+          )
+              : '';
           totalOweUpdatedAt =
-              balances[BalanceType.totalOwe]?.lastTransaction != null
-                  ? DateFormat.yMd().add_jm().format(
-                    balances[BalanceType.totalOwe]!.lastTransaction.toDate(),
-                  )
-                  : '';
+          balances[BalanceType.totalOwe]?.lastTransaction != null
+              ? DateFormat.yMd().add_jm().format(
+            balances[BalanceType.totalOwe]!.lastTransaction.toDate(),
+          )
+              : '';
           totalDueUpdatedAt =
-              balances[BalanceType.totalDue]?.lastTransaction != null
-                  ? DateFormat.yMd().add_jm().format(
-                    balances[BalanceType.totalDue]!.lastTransaction.toDate(),
-                  )
-                  : '';
+          balances[BalanceType.totalDue]?.lastTransaction != null
+              ? DateFormat.yMd().add_jm().format(
+            balances[BalanceType.totalDue]!.lastTransaction.toDate(),
+          )
+              : '';
           expenseUpdatedAt =
-              balances[BalanceType.expenseRecord]?.lastTransaction != null
-                  ? DateFormat.yMd().add_jm().format(
-                    balances[BalanceType.expenseRecord]!.lastTransaction
-                        .toDate(),
-                  )
-                  : '';
+          balances[BalanceType.expenseRecord]?.lastTransaction != null
+              ? DateFormat.yMd().add_jm().format(
+            balances[BalanceType.expenseRecord]!.lastTransaction
+                .toDate(),
+          )
+              : '';
         });
       });
     });
@@ -126,7 +125,7 @@ class _BalanceSectionState extends State<BalanceSection> {
                   ),
                   title: 'Cash balance',
                   amount: cashBalance,
-                  updatedAt: cashUpdatedAt, 
+                  updatedAt: cashUpdatedAt,
                   onTap: () {
                     showDialog(
                       context: context,
@@ -136,9 +135,9 @@ class _BalanceSectionState extends State<BalanceSection> {
                           child: Padding(
                             padding: EdgeInsets.symmetric(
                               horizontal:
-                                  MediaQuery.of(context).size.width * 0.125,
+                              MediaQuery.of(context).size.width * 0.125,
                               vertical:
-                                  MediaQuery.of(context).size.height * 0.125,
+                              MediaQuery.of(context).size.height * 0.125,
                             ),
                             child: UpdateBalanceCard(
                               title: 'Cash balance',
@@ -179,9 +178,9 @@ class _BalanceSectionState extends State<BalanceSection> {
                           child: Padding(
                             padding: EdgeInsets.symmetric(
                               horizontal:
-                                  MediaQuery.of(context).size.width * 0.125,
+                              MediaQuery.of(context).size.width * 0.125,
                               vertical:
-                                  MediaQuery.of(context).size.height * 0.125,
+                              MediaQuery.of(context).size.height * 0.125,
                             ),
                             child: UpdateBalanceCard(
                               title: 'Bank balance',
@@ -205,107 +204,51 @@ class _BalanceSectionState extends State<BalanceSection> {
           ),
         ),
 
-        Padding(
-          padding: const EdgeInsets.only(bottom: 12),
-          child: IntrinsicHeight(
-            child: Row(
-              children: [
-                Expanded(
-                  child: BalanceCard(
-                    isLoading: isLoading,
-                    icon: SvgPicture.asset(
-                      'assets/icons/credit_card.svg',
-                      width: 40,
-                      height: 40,
-                    ),
-                    title: 'Credit card balance',
-                    amount: creditCardBalance,
-                    updatedAt:
-                        creditCardUpdatedAt, 
-                    onTap: () {
-                      showDialog(
-                        context: context,
-                        builder: (context) {
-                          return Align(
-                            alignment: Alignment.center,
-                            child: Padding(
-                              padding: EdgeInsets.symmetric(
-                                horizontal:
-                                    MediaQuery.of(context).size.width * 0.125,
-                                vertical:
-                                    MediaQuery.of(context).size.height * 0.125,
-                              ),
-                              child: UpdateBalanceCard(
-                                title: 'Credit Card balance',
-                                amount: creditCardBalance,
-                                updatedAt: creditCardUpdatedAt,
-                                icon: SvgPicture.asset(
-                                  'assets/icons/credit_card.svg',
-                                  width: 40,
-                                  height: 40,
-                                ),
-                                balance: balances[BalanceType.creditCard]!,
-                              ),
-                            ),
-                          );
-                        },
-                      );
-                    },
-                  ),
-                ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: TotalOweDueCard(
-                    isLoading: isLoading,
-                    icon: SvgPicture.asset(
-                      'assets/icons/total_owe.svg',
-                      width: 40,
-                      height: 40,
-                    ),
-                    oweAmount: totalOwe,
-                    dueAmount: totalDue,
-                    updatedAt:
-                        totalOweUpdatedAt,
-                    onTap: () {
-                      showDialog(
-                        context: context,
-                        builder: (context) {
-                          return Align(
-                            alignment: Alignment.center,
-                            child: Padding(
-                              padding: EdgeInsets.symmetric(
-                                horizontal:
-                                    MediaQuery.of(context).size.width * 0.125,
-                                vertical:
-                                    MediaQuery.of(context).size.height * 0.125,
-                              ),
-                              child: UpdateTotalOweDue(
-                                title: "Total Owe/Due",
-                                oweAmount: totalOwe,
-                                dueAmount: totalDue,
-                                updatedAt: totalOweUpdatedAt,
-                                icon: SvgPicture.asset(
-                                  'assets/icons/total_owe.svg',
-                                  width: 40,
-                                  height: 40,
-                                ),
-                                oweBalance: balances[BalanceType.totalOwe],
-                                dueBalance: balances[BalanceType.totalDue],
-                              ),
-                            ),
-                          );
-                        },
-                      );
-                    },
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-
         Row(
           children: [
+            Expanded(
+              child: BalanceCard(
+                isLoading: isLoading,
+                icon: SvgPicture.asset(
+                  'assets/icons/credit_card.svg',
+                  width: 40,
+                  height: 40,
+                ),
+                title: 'Credit card balance',
+                amount: creditCardBalance,
+                updatedAt: creditCardUpdatedAt,
+                onTap: () {
+                  showDialog(
+                    context: context,
+                    builder: (context) {
+                      return Align(
+                        alignment: Alignment.center,
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(
+                            horizontal:
+                            MediaQuery.of(context).size.width * 0.125,
+                            vertical:
+                            MediaQuery.of(context).size.height * 0.125,
+                          ),
+                          child: UpdateBalanceCard(
+                            title: 'Credit Card balance',
+                            amount: creditCardBalance,
+                            updatedAt: creditCardUpdatedAt,
+                            icon: SvgPicture.asset(
+                              'assets/icons/credit_card.svg',
+                              width: 40,
+                              height: 40,
+                            ),
+                            balance: balances[BalanceType.creditCard]!,
+                          ),
+                        ),
+                      );
+                    },
+                  );
+                },
+              ),
+            ),
+            const SizedBox(width: 12),
             Expanded(
               child: BalanceCard(
                 isLoading: isLoading,
@@ -326,9 +269,9 @@ class _BalanceSectionState extends State<BalanceSection> {
                         child: Padding(
                           padding: EdgeInsets.symmetric(
                             horizontal:
-                                MediaQuery.of(context).size.width * 0.125,
+                            MediaQuery.of(context).size.width * 0.125,
                             vertical:
-                                MediaQuery.of(context).size.height * 0.125,
+                            MediaQuery.of(context).size.height * 0.125,
                           ),
                           child: UpdateBalanceCard(
                             title: 'Expense record',
@@ -348,7 +291,6 @@ class _BalanceSectionState extends State<BalanceSection> {
                 },
               ),
             ),
-            const Expanded(child: SizedBox()),
           ],
         ),
       ],

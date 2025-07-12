@@ -24,7 +24,7 @@ Future<void> addCreditToMiddleman(
   DocumentReference? middleman,
   double credit,
 ) async {
-  if (middleman == null || credit <= 0) return;
+  if (middleman == null ) return;
 
   final docRef = FirebaseFirestore.instance.collection('Middlemen').doc(middleman.id);
   final snapshot = await docRef.get();

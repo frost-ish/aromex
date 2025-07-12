@@ -5,7 +5,6 @@ import 'package:aromex/pages/home/pages/sale_detail_page.dart';
 import 'package:aromex/pages/home/widgets/balance_card.dart';
 import 'package:aromex/widgets/generic_custom_table.dart';
 import 'package:aromex/widgets/profile_card.dart';
-import 'package:aromex/widgets/update_credit.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -23,13 +22,13 @@ class CustomerProfile extends StatefulWidget {
 class _CustomerProfileState extends State<CustomerProfile> {
   List<Sale> sales = [];
   bool isLoading = true;
-  late Customer currentCustomer; 
+  late Customer currentCustomer;
   SaleDetailPage? saleDetailPage;
 
   @override
   void initState() {
     super.initState();
-    currentCustomer = widget.customer!; 
+    currentCustomer = widget.customer!;
     loadSales();
   }
 
@@ -84,25 +83,6 @@ class _CustomerProfileState extends State<CustomerProfile> {
     }
   }
 
-  // Method to refresh customer data from Firestore
-  Future<void> refreshCustomerData() async {
-    try {
-      final doc =
-          await FirebaseFirestore.instance
-              .collection(Customer.collectionName)
-              .doc(currentCustomer.id)
-              .get();
-
-      if (doc.exists) {
-        setState(() {
-          currentCustomer = Customer.fromFirestore(doc);
-        });
-      }
-    } catch (e) {
-      print('Error refreshing customer data: $e');
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
@@ -150,44 +130,9 @@ class _CustomerProfileState extends State<CustomerProfile> {
                         height: 40,
                       ),
                       title: "Credit Details",
-                      onTap: () {
-                        showDialog(
-                          context: context,
-                          builder: (context) {
-                            return Align(
-                              alignment: Alignment.center,
-                              child: Padding(
-                                padding: EdgeInsets.symmetric(
-                                  horizontal:
-                                      MediaQuery.of(context).size.width * 0.125,
-                                  vertical:
-                                      MediaQuery.of(context).size.height *
-                                      0.125,
-                                ),
-                                child: UpdateCredit(
-                                  title: "Update Credit",
-                                  amount: currentCustomer.balance,
-                                  updatedAt: updatedAt,
-                                  icon: SvgPicture.asset(
-                                    'assets/icons/credit_card.svg',
-                                    width: 40,
-                                    height: 40,
-                                  ),
-                                  documentId: currentCustomer.id!,
-                                  collectionName: Customer.collectionName,
-                                  onBalanceUpdated: () {
-                                    // Refresh the customer data when balance is updated
-                                    refreshCustomerData();
-                                  },
-                                ),
-                              ),
-                            );
-                          },
-                        );
-                      },
                       amount: currentCustomer.balance,
                       updatedAt: updatedAt,
-                      isLoading: false,
+                      isLoading: false, onTap: () {  },
                     ),
                   ),
                   const Expanded(child: SizedBox()),
@@ -196,46 +141,46 @@ class _CustomerProfileState extends State<CustomerProfile> {
               const SizedBox(height: 16),
               sales.isNotEmpty
                   ? GenericCustomTable<Sale>(
-                    onTap: (p) {
-                      setState(() {
-                        saleDetailPage = SaleDetailPage(
-                          sale: p,
-                          onBack: () {
-                            setState(() {
-                              saleDetailPage = null;
-                            });
-                          },
-                        );
-                      });
-                    },
-                    entries: sales,
-                    headers: [
-                      "Date",
-                      "Order No.",
-                      "Amount",
-                      "Payment Source",
-                      "Credit",
-                    ],
-                    valueGetters: [
+                onTap: (p) {
+                  setState(() {
+                    saleDetailPage = SaleDetailPage(
+                      sale: p,
+                      onBack: () {
+                        setState(() {
+                          saleDetailPage = null;
+                        });
+                      },
+                    );
+                  });
+                },
+                entries: sales,
+                headers: [
+                  "Date",
+                  "Order No.",
+                  "Amount",
+                  "Payment Source",
+                  "Credit",
+                ],
+                valueGetters: [
                       (p) => DateFormat.yMd().format(p.date),
                       (p) => p.orderNumber,
                       (p) =>
-                          NumberFormat.currency(symbol: '\$').format(p.amount),
+                      NumberFormat.currency(symbol: '\$').format(p.amount),
                       (p) => balanceTypeTitles[p.paymentSource]!,
                       (p) =>
-                          NumberFormat.currency(symbol: '\$').format(p.credit),
-                    ],
-                  )
+                      NumberFormat.currency(symbol: '\$').format(p.credit),
+                ],
+              )
                   : isLoading
                   ? const Center(child: CircularProgressIndicator())
                   : Center(
-                    child: Text(
-                      'No Sales Found',
-                      style: textTheme.bodyLarge?.copyWith(
-                        color: colorScheme.onSecondary,
-                      ),
-                    ),
+                child: Text(
+                  'No Sales Found',
+                  style: textTheme.bodyLarge?.copyWith(
+                    color: colorScheme.onSecondary,
                   ),
+                ),
+              ),
             ],
           ),
         ),

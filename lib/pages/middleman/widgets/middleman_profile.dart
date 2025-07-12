@@ -5,7 +5,6 @@ import 'package:aromex/pages/home/pages/sale_detail_page.dart';
 import 'package:aromex/pages/home/widgets/balance_card.dart';
 import 'package:aromex/widgets/generic_custom_table.dart';
 import 'package:aromex/widgets/profile_card.dart';
-import 'package:aromex/widgets/update_credit.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -23,13 +22,13 @@ class MiddlemanProfile extends StatefulWidget {
 class _MiddlemanProfileState extends State<MiddlemanProfile> {
   List<Sale> sales = [];
   bool isLoading = true;
-  late Middleman currentMiddleman; 
+  late Middleman currentMiddleman;
   SaleDetailPage? saleDetailPage;
   @override
   void initState() {
     super.initState();
     currentMiddleman =
-        widget.middleman!; 
+    widget.middleman!;
     loadSales();
   }
 
@@ -84,25 +83,6 @@ class _MiddlemanProfileState extends State<MiddlemanProfile> {
     }
   }
 
-  // Method to refresh middleman data from Firestore
-  Future<void> refreshMiddlemanData() async {
-    try {
-      final doc =
-          await FirebaseFirestore.instance
-              .collection(Middleman.collectionName)
-              .doc(currentMiddleman.id)
-              .get();
-
-      if (doc.exists) {
-        setState(() {
-          currentMiddleman = Middleman.fromFirestore(doc);
-        });
-      }
-    } catch (e) {
-      print('Error refreshing middleman data: $e');
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
@@ -150,50 +130,9 @@ class _MiddlemanProfileState extends State<MiddlemanProfile> {
                         height: 40,
                       ),
                       title: "Credit Details",
-                      onTap: () {
-                        showDialog(
-                          context: context,
-                          builder: (context) {
-                            return Align(
-                              alignment: Alignment.center,
-                              child: Padding(
-                                padding: EdgeInsets.symmetric(
-                                  horizontal:
-                                      MediaQuery.of(context).size.width * 0.125,
-                                  vertical:
-                                      MediaQuery.of(context).size.height *
-                                      0.125,
-                                ),
-                                child: UpdateCredit(
-                                  title: "Update Credit",
-                                  amount:
-                                      currentMiddleman.balance == 0
-                                          ? currentMiddleman.balance
-                                          : -1 * currentMiddleman.balance,
-                                  updatedAt: updatedAt,
-                                  icon: SvgPicture.asset(
-                                    'assets/icons/credit_card.svg',
-                                    width: 40,
-                                    height: 40,
-                                  ),
-                                  documentId: currentMiddleman.id!,
-                                  collectionName: Middleman.collectionName,
-                                  onBalanceUpdated: () {
-                                    // Refresh the middleman data when balance is updated
-                                    refreshMiddlemanData();
-                                  },
-                                ),
-                              ),
-                            );
-                          },
-                        );
-                      },
-                      amount:
-                          currentMiddleman.balance == 0
-                              ? currentMiddleman.balance
-                              : -1 * currentMiddleman.balance,
+                      amount: currentMiddleman.balance,
                       updatedAt: updatedAt,
-                      isLoading: false,
+                      isLoading: false, onTap: () {  },
                     ),
                   ),
                   const Expanded(child: SizedBox()),
@@ -202,46 +141,46 @@ class _MiddlemanProfileState extends State<MiddlemanProfile> {
               const SizedBox(height: 16),
               sales.isNotEmpty
                   ? GenericCustomTable<Sale>(
-                    onTap: (p) {
-                      setState(() {
-                        saleDetailPage = SaleDetailPage(
-                          sale: p,
-                          onBack: () {
-                            setState(() {
-                              saleDetailPage = null;
-                            });
-                          },
-                        );
-                      });
-                    },
-                    entries: sales,
-                    headers: [
-                      "Date",
-                      "Order No.",
-                      "Amount",
-                      "Payment Source",
-                      "Credit",
-                    ],
-                    valueGetters: [
+                onTap: (p) {
+                  setState(() {
+                    saleDetailPage = SaleDetailPage(
+                      sale: p,
+                      onBack: () {
+                        setState(() {
+                          saleDetailPage = null;
+                        });
+                      },
+                    );
+                  });
+                },
+                entries: sales,
+                headers: [
+                  "Date",
+                  "Order No.",
+                  "Amount",
+                  "Payment Source",
+                  "Credit",
+                ],
+                valueGetters: [
                       (p) => DateFormat.yMd().format(p.date),
                       (p) => p.orderNumber,
                       (p) =>
-                          NumberFormat.currency(symbol: '\$').format(p.amount),
-                      (p) => balanceTypeTitles[p.paymentSource]!,
+                      NumberFormat.currency(symbol: '\$').format(p.amount),
+                      (p) => balanceTypeTitles[p.paymentSource]?? 'Unknown',
                       (p) =>
-                          NumberFormat.currency(symbol: '\$').format(p.credit),
-                    ],
-                  )
+                      NumberFormat.currency(symbol: '\$').format(p.credit),
+                ],
+              )
                   : isLoading
                   ? const Center(child: CircularProgressIndicator())
                   : Center(
-                    child: Text(
-                      'No Sales Found',
-                      style: textTheme.bodyLarge?.copyWith(
-                        color: colorScheme.onSecondary,
-                      ),
-                    ),
+                child: Text(
+                  'No Sales Found',
+                  style: textTheme.bodyLarge?.copyWith(
+                    color: colorScheme.onSecondary,
                   ),
+                ),
+              ),
             ],
           ),
         ),

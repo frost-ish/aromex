@@ -5,7 +5,6 @@ import 'package:aromex/pages/home/pages/purchase_detail_page.dart';
 import 'package:aromex/pages/home/widgets/balance_card.dart';
 import 'package:aromex/widgets/profile_card.dart';
 import 'package:aromex/widgets/generic_custom_table.dart';
-import 'package:aromex/widgets/update_credit.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -44,25 +43,6 @@ class _SupplierProfileState extends State<SupplierProfile> {
         purchases = fetched;
         isLoading = false;
       });
-    }
-  }
-
-  // Method to refresh supplier data from Firestore
-  Future<void> refreshSupplierData() async {
-    try {
-      final doc =
-          await FirebaseFirestore.instance
-              .collection(Supplier.collectionName)
-              .doc(currentSupplier.id)
-              .get();
-
-      if (doc.exists) {
-        setState(() {
-          currentSupplier = Supplier.fromFirestore(doc);
-        });
-      }
-    } catch (e) {
-      print('Error refreshing supplier data: $e');
     }
   }
 
@@ -109,46 +89,9 @@ class _SupplierProfileState extends State<SupplierProfile> {
                         height: 40,
                       ),
                       title: "Credit Details",
-                      onTap: () {
-                        showDialog(
-                          context: context,
-                          builder: (context) {
-                            return Align(
-                              alignment: Alignment.center,
-                              child: Padding(
-                                padding: EdgeInsets.symmetric(
-                                  horizontal:
-                                      MediaQuery.of(context).size.width * 0.125,
-                                  vertical:
-                                      MediaQuery.of(context).size.height *
-                                      0.125,
-                                ),
-                                child: UpdateCredit(
-                                  title: "Update Credit",
-                                  amount: currentSupplier.balance,
-                                  updatedAt: updatedAt,
-                                  icon: SvgPicture.asset(
-                                    'assets/icons/credit_card.svg',
-                                    width: 40,
-                                    height: 40,
-                                  ),
-                                  documentId: currentSupplier.id!,
-                                  collectionName: Supplier.collectionName,
-                                  onBalanceUpdated: () {
-                                    // Refresh the supplier data when balance is updated
-                                    refreshSupplierData();
-                                  },
-                                ),
-                              ),
-                            );
-                          },
-                        );
-                      },
-                      amount:
-                          currentSupplier
-                              .balance, // Use currentSupplier instead
+                      amount: currentSupplier.balance,
                       updatedAt: updatedAt,
-                      isLoading: false,
+                      isLoading: false, onTap: () {  },
                     ),
                   ),
                   const Expanded(child: SizedBox()),
@@ -157,44 +100,44 @@ class _SupplierProfileState extends State<SupplierProfile> {
               const SizedBox(height: 16),
               purchases.isNotEmpty
                   ? GenericCustomTable<Purchase>(
-                    onTap: (p) {
-                      setState(() {
-                        purchaseDetailPage = PurchaseDetailPage(
-                          purchase: p,
-                          onBack: () {
-                            setState(() {
-                              purchaseDetailPage = null;
-                            });
-                          },
-                        );
-                      });
-                    },
-                    entries: purchases,
-                    headers: [
-                      "Date",
-                      "Order No.",
-                      "Amount",
-                      "Payment Source",
-                      "Credit",
-                    ],
-                    valueGetters: [
+                onTap: (p) {
+                  setState(() {
+                    purchaseDetailPage = PurchaseDetailPage(
+                      purchase: p,
+                      onBack: () {
+                        setState(() {
+                          purchaseDetailPage = null;
+                        });
+                      },
+                    );
+                  });
+                },
+                entries: purchases,
+                headers: [
+                  "Date",
+                  "Order No.",
+                  "Amount",
+                  "Payment Source",
+                  "Credit",
+                ],
+                valueGetters: [
                       (p) => p.date.toString(),
                       (p) => p.orderNumber,
                       (p) => p.amount.toString(),
                       (p) => balanceTypeTitles[p.paymentSource]!,
                       (p) => p.credit.toString(),
-                    ],
-                  )
+                ],
+              )
                   : isLoading
                   ? const Center(child: CircularProgressIndicator())
                   : Center(
-                    child: Text(
-                      'No Purchases Found',
-                      style: textTheme.bodyLarge?.copyWith(
-                        color: colorScheme.onSecondary,
-                      ),
-                    ),
+                child: Text(
+                  'No Purchases Found',
+                  style: textTheme.bodyLarge?.copyWith(
+                    color: colorScheme.onSecondary,
                   ),
+                ),
+              ),
             ],
           ),
         ),
