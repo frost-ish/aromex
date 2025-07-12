@@ -3,12 +3,9 @@ import 'package:aromex/models/bill_item.dart';
 import 'package:aromex/util.dart';
 import 'package:file_selector/file_selector.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
-import 'dart:typed_data';
-import 'dart:io'; // Add this import
+import 'dart:io';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:pdf/pdf.dart';
-import 'package:file_selector/file_selector.dart';
 
 class Bill {
   final String storeName = "Aromex Communication";
