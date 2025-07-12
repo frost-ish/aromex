@@ -347,7 +347,7 @@ class SalePageCardState extends State<SalePageCard> {
                                     (total, phone) =>
                                         total + phone.sellingPrice!,
                                   ),
-                                  phoneList: phones,
+                                  phoneList: List<Phone>.from(phones),
                                   originalPrice: phones.fold(
                                     0.0,
                                     (total, phone) => total! + phone.price,
